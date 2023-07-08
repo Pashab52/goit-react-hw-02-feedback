@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { Statistics } from './Statistics/Statistics';
+import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 
 export class App extends Component {
   state = {
@@ -8,34 +9,35 @@ export class App extends Component {
     bad: 0,
   };
 
-  addFeedback = event => {
-    // console.dir(event.target.dataset.btn);
 
-    // console.dir(event.currentTarget.textContent);
+  options = Object.keys(this.state);
 
-    this.setState(prevState => {
-      return {
-        [event.target.dataset.btn]: prevState[event.target.dataset.btn] + 1,
-      };
-    });
+  addFeedback = option => {
+
+//  this.setState(prevState => ({
+//    [event.target.dataset.btn]: prevState[event.target.dataset.btn] + 1,
+//  }));
+
+    this.setState(prevState => ({
+    
+        [option]: prevState[option] + 1,
+      
+    }));
   };
 
   countTotalFeedback() {
     let totalFeedback = 0;
     for (let key in this.state) {
       totalFeedback += this.state[key];
-      console.log(totalFeedback)
     }
     return totalFeedback;
-   };
+  }
 
   countPositiveFeedbackPercentage() {
-return Math.round (this.state.good / this.countTotalFeedback() * 100)
-
-   };
+    return Math.round((this.state.good / this.countTotalFeedback()) * 100);
+  }
 
   render() {
-    
     return (
       <div
         style={{
@@ -50,15 +52,11 @@ return Math.round (this.state.good / this.countTotalFeedback() * 100)
       >
         <p>Please leave feedback</p>
 
-        <button type="button" data-btn="good" onClick={this.addFeedback}>
-          Good
-        </button>
-        <button type="button" data-btn="neutral" onClick={this.addFeedback}>
-          Neutral
-        </button>
-        <button type="button" data-btn="bad" onClick={this.addFeedback}>
-          Bad
-        </button>
+        
+
+
+<FeedbackOptions options={this.options} onLeaveFeedback={this.addFeedback} />
+       
         <Statistics
           good={this.state.good}
           neutral={this.state.neutral}
@@ -69,7 +67,7 @@ return Math.round (this.state.good / this.countTotalFeedback() * 100)
               ? this.countPositiveFeedbackPercentage()
               : 0
           }
-        ></Statistics>
+        />
       </div>
     );
   }
