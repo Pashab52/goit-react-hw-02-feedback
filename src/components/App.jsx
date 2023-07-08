@@ -8,36 +8,43 @@ export class App extends Component {
     bad: 0,
   };
 
-  addFeedback = (event) => {
-    // console.dir(event);
-    console.dir(event.target.dataset.btn);
-    // console.dir(event.currentTarget.dataset);
+  addFeedback = event => {
+    // console.dir(event.target.dataset.btn);
+
+    // console.dir(event.currentTarget.textContent);
+
     this.setState(prevState => {
-   
-    
+      return {
+        [event.target.dataset.btn]: prevState[event.target.dataset.btn] + 1,
+      };
+    });
+  };
 
-      return { [event.target.dataset.btn]: prevState[event.target.dataset.btn] + 1 };
-    })
-      
-      
-      
+  countTotalFeedback() {
+    let totalFeedback = 0;
+    for (let key in this.state) {
+      totalFeedback += this.state[key];
+      console.log(totalFeedback)
+    }
+    return totalFeedback;
+   };
 
-// this.setState({good: 1});
+  countPositiveFeedbackPercentage() {
+return Math.round (this.state.good / this.countTotalFeedback() * 100)
 
-
-   
-  }
+   };
 
   render() {
-   
+    
     return (
       <div
         style={{
           height: '100vh',
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          fontSize: 40,
+          fontSize: 22,
           color: '#010101',
         }}
       >
@@ -52,6 +59,15 @@ export class App extends Component {
         <button type="button" data-btn="bad" onClick={this.addFeedback}>
           Bad
         </button>
+
+        <p>Statistics</p>
+        <span>Good: {this.state.good}</span>
+        <span>Neutral: {this.state.neutral}</span>
+        <span>Bad: {this.state.bad}</span>
+        <span>Total: {this.countTotalFeedback()}</span>
+        <span>
+          Positive feedback: {this.countPositiveFeedbackPercentage() ? this.countPositiveFeedbackPercentage() : 0}%
+        </span>
       </div>
     );
   }
